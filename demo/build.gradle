@@ -37,6 +37,15 @@ dependencies {
     implementation deps.androidx.core
     implementation deps.androidx.appcompat
     implementation deps.androidx.constraintLayout
+    implementation deps.androidx.recyclerView
+    implementation deps.okHttp.okHttp
+    implementation deps.okHttp.loggingInterceptor
+    implementation deps.retrofit.retrofit
+    implementation deps.retrofit.converterGson
+    implementation deps.gson
+    implementation deps.dagger2.dagger
+    implementation deps.kotlinx.coroutines
+    implementation deps.kotlinx.coroutinesAndroid
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
