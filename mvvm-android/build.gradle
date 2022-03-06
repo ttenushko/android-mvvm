@@ -1,0 +1,53 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+archivesBaseName = "mvvm-android"
+version = "$MVVM_ANDROID_VERSION_NAME"
+
+android {
+    compileSdk 32
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 32
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+        freeCompilerArgs += '-Xexplicit-api=strict'
+    }
+}
+
+android.libraryVariants.all { variant ->
+    variant.outputs.each { output ->
+        if (output.outputFileName != null && output.outputFileName.endsWith('.aar')) {
+            def fileName = "${archivesBaseName}-${version}-${variant.buildType.name}.aar"
+            output.outputFileName = fileName
+        }
+    }
+}
+
+dependencies {
+    implementation project(':mvvm-core')
+    implementation deps.androidx.lifecycleRuntime
+    implementation deps.androidx.lifecycleExtensions
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
