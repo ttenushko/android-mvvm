@@ -1,27 +1,39 @@
 package com.ttenushko.mvvm.demo.presentation.base.fragment
 
 import android.os.Bundle
-import com.ttenushko.mvvm.ViewModel
-import com.ttenushko.mvvm.android.ViewModelHolder
 import com.ttenushko.mvvm.android.ViewModelStatePersistence
+import com.ttenushko.mvvm.demo.presentation.base.viewmodel.ViewModel
 
 abstract class BaseMvvmFragment<S : ViewModel.State, V : ViewModel<S>> : BaseFragment() {
 
-    private lateinit var viewModelHolder: ViewModelHolder<S, V>
+    private lateinit var _viewModel: V
+    private lateinit var _viewModelStatePersistence: ViewModelStatePersistence<S>
     protected val viewModel: V
-        get() = viewModelHolder.viewModel
-    protected abstract val viewModelStatePersistence: ViewModelStatePersistence<S>
+        get() = _viewModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModelHolder =
-            provideViewModelHolder(viewModelStatePersistence.restoreState(savedInstanceState))
+        _viewModelStatePersistence = provideViewModelStatePersistence()
+        _viewModel = provideViewModel(_viewModelStatePersistence.restoreState(savedInstanceState))
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        viewModelStatePersistence.saveState(viewModel.saveState(), outState)
+        _viewModelStatePersistence.saveState(viewModel.saveState(), outState)
     }
 
-    protected abstract fun provideViewModelHolder(savedState: S?): ViewModelHolder<S, V>
+    override fun onStart() {
+        super.onStart()
+        viewModel.start()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        viewModel.stop()
+    }
+
+    protected abstract fun provideViewModelStatePersistence(): ViewModelStatePersistence<S>
+
+    protected abstract fun provideViewModel(savedState: S?): V
 }

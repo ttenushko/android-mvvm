@@ -6,6 +6,8 @@ ext {
                     lifecycleRuntime   : 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1',
                     lifecycleViewmodel : 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1',
                     lifecycleExtensions: 'androidx.lifecycle:lifecycle-extensions:2.2.0',
+                    navigationFragment : 'androidx.navigation:navigation-fragment-ktx:2.4.1',
+                    navigationUi       : 'androidx.navigation:navigation-ui-ktx:2.4.1',
                     constraintLayout   : 'androidx.constraintlayout:constraintlayout:2.1.3',
                     recyclerView       : 'androidx.recyclerview:recyclerview:1.2.1'
             ],

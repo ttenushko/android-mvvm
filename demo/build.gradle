@@ -1,7 +1,13 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
+    id 'kotlin-kapt'
 }
+
+def openWeatherMapProperties = loadProperties(project.rootProject.file('open_weather_map.properties'))
+def OPEN_WEATHER_MAP_API_KEY = openWeatherMapProperties.getProperty("open_weather_map_api_key", ">> Type your OpenWeatherMap API key here <<")
+def OPEN_WEATHER_MAP_API_BASE_URL = openWeatherMapProperties.getProperty("open_weather_map_api_base_url", ">> Type OpenWeatherMap API base URL here <<")
+
 
 android {
     compileSdk 32
@@ -15,7 +21,9 @@ android {
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
-
+    buildFeatures {
+        viewBinding true
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -31,11 +39,18 @@ android {
     }
 }
 
+android.applicationVariants.all { variant ->
+    variant.buildConfigField "String", "OPEN_WEATHER_MAP_API_KEY", "\"${OPEN_WEATHER_MAP_API_KEY}\""
+    variant.buildConfigField "String", "OPEN_WEATHER_MAP_API_BASE_URL", "\"${OPEN_WEATHER_MAP_API_BASE_URL}\""
+}
+
 dependencies {
     implementation project(':mvvm-core')
     implementation project(':mvvm-android')
     implementation deps.androidx.core
     implementation deps.androidx.appcompat
+    implementation deps.androidx.navigationFragment
+    implementation deps.androidx.navigationUi
     implementation deps.androidx.constraintLayout
     implementation deps.androidx.recyclerView
     implementation deps.okHttp.okHttp
@@ -43,11 +58,24 @@ dependencies {
     implementation deps.retrofit.retrofit
     implementation deps.retrofit.converterGson
     implementation deps.gson
+    implementation deps.picasso
     implementation deps.dagger2.dagger
     implementation deps.kotlinx.coroutines
     implementation deps.kotlinx.coroutinesAndroid
 
+    kapt deps.dagger2.daggerCompiler
+
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
+
+static def loadProperties(File file) {
+    Properties properties = new Properties()
+    try {
+        properties.load(file.newDataInputStream())
+    } catch (ignore) {
+
+    }
+    return properties
 }
