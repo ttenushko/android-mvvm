@@ -2,58 +2,53 @@ package com.ttenushko.mvvm.demo.di.presentation.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.ttenushko.androidmvi.demo.di.dependency.ComponentDependencies
-import com.ttenushko.androidmvi.demo.domain.application.usecase.SavePlaceUseCase
-import com.ttenushko.androidmvi.demo.domain.weather.usecase.SearchPlaceUseCase
-import com.ttenushko.androidmvi.demo.presentation.di.annotation.ViewModelKey
-import com.ttenushko.androidmvi.demo.presentation.screens.addplace.AddPlaceFragment
-import com.ttenushko.androidmvi.demo.presentation.screens.addplace.AddPlacesFragmentViewModel
-import com.ttenushko.androidmvi.demo.presentation.screens.home.addplace.mvi.Action
-import com.ttenushko.androidmvi.demo.presentation.screens.home.addplace.mvi.AddPlaceStore
-import com.ttenushko.androidmvi.demo.presentation.utils.ViewModelFactory
-import dagger.Binds
+import com.ttenushko.mvvm.android.ViewModelHolder
+import com.ttenushko.mvvm.android.ViewModelStatePersistence
+import com.ttenushko.mvvm.demo.di.Dependency
+import com.ttenushko.mvvm.demo.domain.application.usecase.TrackSavedPlacesUseCase
+import com.ttenushko.mvvm.demo.presentation.base.fragment.BaseFragment
+import com.ttenushko.mvvm.demo.presentation.base.router.Router
+import com.ttenushko.mvvm.demo.presentation.screen.MainRouter
+import com.ttenushko.mvvm.demo.presentation.screen.addplace.AddPlaceFragment
+import com.ttenushko.mvvm.demo.presentation.screen.addplace.AddPlaceViewModel
+import com.ttenushko.mvvm.demo.presentation.screen.addplace.AddPlaceViewModelImpl
+import com.ttenushko.mvvm.demo.presentation.screen.addplace.AddPlaceViewModelStatePersistence
 import dagger.Component
 import dagger.Provides
-import dagger.multibindings.IntoMap
 
-interface AddPlaceFragmentDependencies : ComponentDependencies {
-    fun mviEventLogger(): MviEventLogger<Any>
-    fun mviLogger(): MviLogger<Any, Any>
-    fun searchPlaceUseCase(): SearchPlaceUseCase
-    fun savePlaceUseCase(): SavePlaceUseCase
+interface AddPlaceFragmentDependencies : Dependency {
+    fun trackSavedPlacesUseCase(): TrackSavedPlacesUseCase
+    fun router(): Router<MainRouter.Destination>
 }
 
 @dagger.Module
-internal class AddPlaceFragmentModule(private val search: String) {
-    @Suppress("UNCHECKED_CAST")
+internal class AddPlaceFragmentModule(
+    private val search: String
+) {
     @Provides
-    fun provideViewModel(
-        mviLogger: MviLogger<Any, Any>,
-        searchPlaceUseCase: SearchPlaceUseCase,
-        savePlaceUseCase: SavePlaceUseCase
-    ): AddPlacesFragmentViewModel =
-        AddPlacesFragmentViewModel(
-            mviLogger as MviLogger<Action, AddPlaceStore.State>,
-            search,
-            searchPlaceUseCase,
-            savePlaceUseCase
-        )
-}
+    fun viewModelProvider(
+        trackSavedPlacesUseCase: TrackSavedPlacesUseCase,
+        router: Router<MainRouter.Destination>
+    ): (BaseFragment, AddPlaceViewModel.State?) -> AddPlaceViewModel = { fragment, savedState ->
+        ViewModelProvider(fragment, object : ViewModelProvider.Factory {
+            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+                AddPlaceViewModelHolder(
+                    AddPlaceViewModelImpl(savedState, trackSavedPlacesUseCase, router)
+                ) as T
+        }).get(AddPlaceViewModelHolder::class.java).viewModel
+    }
 
-@dagger.Module
-internal abstract class ViewModelBindingModule {
-    @Binds
-    @IntoMap
-    @ViewModelKey(AddPlacesFragmentViewModel::class)
-    internal abstract fun bindViewModel(viewModel: AddPlacesFragmentViewModel): ViewModel
+    @Provides
+    fun viewModelStatePersistence(): ViewModelStatePersistence<AddPlaceViewModel.State> =
+        AddPlaceViewModelStatePersistence()
 
-    @Binds
-    internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+    class AddPlaceViewModelHolder(viewModel: AddPlaceViewModel) :
+        ViewModelHolder<AddPlaceViewModel.State, AddPlaceViewModel>(viewModel)
 }
 
 @Component(
     dependencies = [AddPlaceFragmentDependencies::class],
-    modules = [AddPlaceFragmentModule::class, ViewModelBindingModule::class]
+    modules = [AddPlaceFragmentModule::class]
 )
 internal interface AddPlaceFragmentComponent {
 

@@ -2,61 +2,54 @@ package com.ttenushko.mvvm.demo.di.presentation.screen
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.squareup.picasso.Picasso
-import com.ttenushko.androidmvi.demo.di.dependency.ComponentDependencies
-import com.ttenushko.androidmvi.demo.domain.application.usecase.DeletePlaceUseCase
-import com.ttenushko.androidmvi.demo.domain.weather.usecase.GetCurrentWeatherConditionsUseCase
-import com.ttenushko.androidmvi.demo.presentation.di.annotation.ViewModelKey
-import com.ttenushko.androidmvi.demo.presentation.screens.placedetails.PlaceDetailsFragment
-import com.ttenushko.androidmvi.demo.presentation.screens.placedetails.PlaceDetailsFragmentViewModel
-import com.ttenushko.androidmvi.demo.presentation.screens.home.placedetails.mvi.Action
-import com.ttenushko.androidmvi.demo.presentation.screens.home.placedetails.mvi.PlaceDetailsStore
-import com.ttenushko.androidmvi.demo.presentation.utils.ViewModelFactory
-import dagger.Binds
+import com.ttenushko.mvvm.android.ViewModelHolder
+import com.ttenushko.mvvm.android.ViewModelStatePersistence
+import com.ttenushko.mvvm.demo.di.Dependency
+import com.ttenushko.mvvm.demo.domain.application.usecase.TrackSavedPlacesUseCase
+import com.ttenushko.mvvm.demo.presentation.base.fragment.BaseFragment
+import com.ttenushko.mvvm.demo.presentation.base.router.Router
+import com.ttenushko.mvvm.demo.presentation.screen.MainRouter
+import com.ttenushko.mvvm.demo.presentation.screen.placedetails.PlaceDetailsFragment
+import com.ttenushko.mvvm.demo.presentation.screen.placedetails.PlaceDetailsViewModel
+import com.ttenushko.mvvm.demo.presentation.screen.placedetails.PlaceDetailsViewModelImpl
+import com.ttenushko.mvvm.demo.presentation.screen.placedetails.PlaceDetailsViewModelStatePersistence
 import dagger.Component
 import dagger.Provides
-import dagger.multibindings.IntoMap
 
-interface PlaceDetailsFragmentDependencies : ComponentDependencies {
-    fun mviEventLogger(): MviEventLogger<Any>
-    fun mviLogger(): MviLogger<Any, Any>
-    fun getCurrentWeatherConditionsUseCase(): GetCurrentWeatherConditionsUseCase
-    fun deletePlaceUseCase(): DeletePlaceUseCase
-    fun picasso(): Picasso
+interface PlaceDetailsFragmentDependencies : Dependency {
+    fun trackSavedPlacesUseCase(): TrackSavedPlacesUseCase
+    fun router(): Router<MainRouter.Destination>
 }
 
 @dagger.Module
-internal class PlaceDetailsFragmentModule(private val placeId: Long) {
-    @Suppress("UNCHECKED_CAST")
+internal class PlaceDetailsFragmentModule(
+    private val placeId: Long
+) {
     @Provides
-    fun provideViewModel(
-        mviLogger: MviLogger<Any, Any>,
-        getCurrentWeatherConditionsUseCase: GetCurrentWeatherConditionsUseCase,
-        deletePlaceUseCase: DeletePlaceUseCase
-    ): PlaceDetailsFragmentViewModel =
-        PlaceDetailsFragmentViewModel(
-            mviLogger as MviLogger<Action, PlaceDetailsStore.State>,
-            placeId,
-            getCurrentWeatherConditionsUseCase,
-            deletePlaceUseCase
-        )
+    fun viewModelProvider(
+        trackSavedPlacesUseCase: TrackSavedPlacesUseCase,
+        router: Router<MainRouter.Destination>
+    ): (BaseFragment, PlaceDetailsViewModel.State?) -> PlaceDetailsViewModel =
+        { fragment, savedState ->
+            ViewModelProvider(fragment, object : ViewModelProvider.Factory {
+                override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+                    PlaceDetailsViewModelHolder(
+                        PlaceDetailsViewModelImpl(savedState, trackSavedPlacesUseCase, router)
+                    ) as T
+            }).get(PlaceDetailsViewModelHolder::class.java).viewModel
+        }
+
+    @Provides
+    fun viewModelStatePersistence(): ViewModelStatePersistence<PlaceDetailsViewModel.State> =
+        PlaceDetailsViewModelStatePersistence()
+
+    class PlaceDetailsViewModelHolder(viewModel: PlaceDetailsViewModel) :
+        ViewModelHolder<PlaceDetailsViewModel.State, PlaceDetailsViewModel>(viewModel)
 }
-
-@dagger.Module
-internal abstract class ViewModelBindingModule {
-    @Binds
-    @IntoMap
-    @ViewModelKey(PlaceDetailsFragmentViewModel::class)
-    internal abstract fun bindViewModel(viewModel: PlaceDetailsFragmentViewModel): ViewModel
-
-    @Binds
-    internal abstract fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
-}
-
 
 @Component(
     dependencies = [PlaceDetailsFragmentDependencies::class],
-    modules = [PlaceDetailsFragmentModule::class, ViewModelBindingModule::class]
+    modules = [PlaceDetailsFragmentModule::class]
 )
 internal interface PlaceDetailsFragmentComponent {
 

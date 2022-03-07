@@ -6,9 +6,9 @@ import android.app.Service
 import android.content.BroadcastReceiver
 import android.content.Context
 import androidx.fragment.app.Fragment
-import com.ttenushko.androidmvi.demo.di.DependenciesProvider
-import com.ttenushko.androidmvi.demo.di.Dependency
-import com.ttenushko.androidmvi.demo.di.ProvidesDependencies
+import com.ttenushko.mvvm.demo.di.DependenciesProvider
+import com.ttenushko.mvvm.demo.di.Dependency
+import com.ttenushko.mvvm.demo.di.ProvidesDependencies
 
 
 inline fun <reified T : Dependency> Activity.findDependency(): T =

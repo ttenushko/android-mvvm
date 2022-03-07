@@ -1,7 +1,7 @@
 package com.ttenushko.mvvm.demo.domain.application.usecase
 
-import com.ttenushko.androidmvi.demo.domain.usecase.SingleResultUseCase
-import com.ttenushko.androidmvi.demo.domain.weather.model.Place
+import com.ttenushko.mvvm.demo.domain.usecase.SingleResultUseCase
+import com.ttenushko.mvvm.demo.domain.weather.model.Place
 
 interface GetSavedPlacesUseCase :
     SingleResultUseCase<GetSavedPlacesUseCase.Param, GetSavedPlacesUseCase.Result> {

@@ -1,12 +1,11 @@
 package com.ttenushko.mvvm.demo.presentation.utils.task
 
-import com.ttenushko.androidmvi.demo.domain.usecase.Cancellable
-import com.ttenushko.androidmvi.demo.domain.usecase.MultiResultUseCase
-import com.ttenushko.androidmvi.demo.domain.usecase.SingleResultUseCase
-import com.ttenushko.androidmvi.demo.domain.usecase.asCancellable
+import com.ttenushko.mvvm.demo.domain.usecase.Cancellable
+import com.ttenushko.mvvm.demo.domain.usecase.MultiResultUseCase
+import com.ttenushko.mvvm.demo.domain.usecase.SingleResultUseCase
+import com.ttenushko.mvvm.demo.domain.usecase.asCancellable
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 
 fun <P : Any, R : Any> MultiResultUseCase<P, R>.asTask(): Task<P, R> =
     object : Task<P, R> {

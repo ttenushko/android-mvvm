@@ -1,7 +1,5 @@
 package com.ttenushko.mvvm.demo.presentation.screen
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.widget.Toolbar
 import androidx.navigation.findNavController
@@ -9,12 +7,17 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.ttenushko.mvvm.demo.R
+import com.ttenushko.mvvm.demo.di.DependenciesProvider
+import com.ttenushko.mvvm.demo.di.ProvidesDependencies
 import com.ttenushko.mvvm.demo.di.domain.UseCaseModule
+import com.ttenushko.mvvm.demo.di.presentation.screen.DaggerMainActivityComponent
+import com.ttenushko.mvvm.demo.di.presentation.screen.MainActivityModule
 import com.ttenushko.mvvm.demo.presentation.base.activity.BaseActivity
 import com.ttenushko.mvvm.demo.presentation.base.router.RouterProxy
+import com.ttenushko.mvvm.demo.presentation.utils.dagger.findDependency
 import javax.inject.Inject
 
-class MainActivity : BaseActivity() {
+class MainActivity : BaseActivity(), ProvidesDependencies {
 
     @Inject
     lateinit var router: MainRouterImpl
@@ -22,17 +25,23 @@ class MainActivity : BaseActivity() {
     @Inject
     lateinit var routerProxy: RouterProxy<MainRouter.Destination>
 
+    @Suppress("ProtectedInFinal")
+    @Inject
+    override lateinit var dependenciesProvider: DependenciesProvider
+        protected set
+
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
         DaggerMainActivityComponent.builder()
-            .applicationDependencies(findComponentDependencies())
+            .publicDependencies(findDependency())
             .useCaseModule(UseCaseModule())
+            .mainActivityModule(MainActivityModule(this))
             .build()
             .inject(this)
 
+        super.onCreate(savedInstanceState)
+
         setContentView(R.layout.activity_main)
-        router.initialize(this)
     }
 
     override fun onStart() {

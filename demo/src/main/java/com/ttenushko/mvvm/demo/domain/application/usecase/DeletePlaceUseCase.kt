@@ -1,6 +1,6 @@
 package com.ttenushko.mvvm.demo.domain.application.usecase
 
-import com.ttenushko.androidmvi.demo.domain.usecase.SingleResultUseCase
+import com.ttenushko.mvvm.demo.domain.usecase.SingleResultUseCase
 
 interface DeletePlaceUseCase :
     SingleResultUseCase<DeletePlaceUseCase.Param, DeletePlaceUseCase.Result> {

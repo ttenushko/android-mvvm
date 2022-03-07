@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
-import com.ttenushko.androidmvi.demo.domain.utils.isInternetConnectivityError
-import com.ttenushko.androidmvi.demo.presentation.utils.showDialog
+import com.ttenushko.mvvm.demo.domain.utils.isInternetConnectivityError
+import com.ttenushko.mvvm.demo.presentation.utils.showDialog
 
 object DefaultErrorHandler {
     const val DLG_ERROR = "dlgError"

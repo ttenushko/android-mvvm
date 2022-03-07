@@ -18,7 +18,7 @@
 
     <fragment
         android:id="@+id/placesFragment"
-        android:name="com.ttenushko.androidmvi.demo.presentation.screens.places.PlacesFragment"
+        android:name="com.ttenushko.mvvm.demo.presentation.screen.places.PlacesFragment"
         android:label="@null">
         <action
             android:id="@+id/action_placesFragment_to_addPlaceFragment"
@@ -42,7 +42,7 @@
 
     <fragment
         android:id="@+id/addPlaceFragment"
-        android:name="com.ttenushko.androidmvi.demo.presentation.screens.addplace.AddPlaceFragment"
+        android:name="com.ttenushko.mvvm.demo.presentation.screen.addplace.AddPlaceFragment"
         android:label="@null">
         <argument
             android:name="search"
@@ -52,7 +52,7 @@
     </fragment>
     <fragment
         android:id="@+id/placeDetailsFragment"
-        android:name="com.ttenushko.androidmvi.demo.presentation.screens.placedetails.PlaceDetailsFragment"
+        android:name="com.ttenushko.mvvm.demo.presentation.screen.placedetails.PlaceDetailsFragment"
         android:label="@null" />
 
 </navigation>

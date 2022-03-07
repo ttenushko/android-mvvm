@@ -4,6 +4,7 @@ import android.content.Context
 import com.ttenushko.mvvm.demo.App
 import com.ttenushko.mvvm.demo.di.data.DataModule
 import com.ttenushko.mvvm.demo.presentation.utils.dagger.ApplicationContext
+import com.ttenushko.mvvm.demo.presentation.utils.dagger.ApplicationScope
 import dagger.BindsInstance
 import dagger.Component
 
