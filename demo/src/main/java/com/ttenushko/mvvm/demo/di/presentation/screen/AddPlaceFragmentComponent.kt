@@ -5,7 +5,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.ttenushko.mvvm.android.ViewModelHolder
 import com.ttenushko.mvvm.android.ViewModelStatePersistence
 import com.ttenushko.mvvm.demo.di.Dependency
-import com.ttenushko.mvvm.demo.domain.application.usecase.TrackSavedPlacesUseCase
+import com.ttenushko.mvvm.demo.domain.application.usecase.SavePlaceUseCase
+import com.ttenushko.mvvm.demo.domain.weather.usecase.SearchPlaceUseCase
 import com.ttenushko.mvvm.demo.presentation.base.fragment.BaseFragment
 import com.ttenushko.mvvm.demo.presentation.base.router.Router
 import com.ttenushko.mvvm.demo.presentation.screen.MainRouter
@@ -13,11 +14,14 @@ import com.ttenushko.mvvm.demo.presentation.screen.addplace.AddPlaceFragment
 import com.ttenushko.mvvm.demo.presentation.screen.addplace.AddPlaceViewModel
 import com.ttenushko.mvvm.demo.presentation.screen.addplace.AddPlaceViewModelImpl
 import com.ttenushko.mvvm.demo.presentation.screen.addplace.AddPlaceViewModelStatePersistence
+import com.ttenushko.mvvm.demo.presentation.utils.task.TaskExecutorFactory
 import dagger.Component
 import dagger.Provides
 
 interface AddPlaceFragmentDependencies : Dependency {
-    fun trackSavedPlacesUseCase(): TrackSavedPlacesUseCase
+    fun searchPlaceUseCase(): SearchPlaceUseCase
+    fun savePlaceUseCase(): SavePlaceUseCase
+    fun taskExecutorFactory(): TaskExecutorFactory
     fun router(): Router<MainRouter.Destination>
 }
 
@@ -27,16 +31,26 @@ internal class AddPlaceFragmentModule(
 ) {
     @Provides
     fun viewModelProvider(
-        trackSavedPlacesUseCase: TrackSavedPlacesUseCase,
+        searchPlaceUseCase: SearchPlaceUseCase,
+        savePlaceUseCase: SavePlaceUseCase,
+        taskExecutorFactory: TaskExecutorFactory,
         router: Router<MainRouter.Destination>
-    ): (BaseFragment, AddPlaceViewModel.State?) -> AddPlaceViewModel = { fragment, savedState ->
-        ViewModelProvider(fragment, object : ViewModelProvider.Factory {
-            override fun <T : ViewModel?> create(modelClass: Class<T>): T =
-                AddPlaceViewModelHolder(
-                    AddPlaceViewModelImpl(savedState, trackSavedPlacesUseCase, router)
-                ) as T
-        }).get(AddPlaceViewModelHolder::class.java).viewModel
-    }
+    ): (BaseFragment, AddPlaceViewModel.State?) -> AddPlaceViewModel =
+        { fragment, savedState ->
+            ViewModelProvider(fragment, object : ViewModelProvider.Factory {
+                override fun <T : ViewModel?> create(modelClass: Class<T>): T =
+                    AddPlaceViewModelHolder(
+                        AddPlaceViewModelImpl(
+                            savedState,
+                            search,
+                            searchPlaceUseCase,
+                            savePlaceUseCase,
+                            taskExecutorFactory,
+                            router
+                        )
+                    ) as T
+            }).get(AddPlaceViewModelHolder::class.java).viewModel
+        }
 
     @Provides
     fun viewModelStatePersistence(): ViewModelStatePersistence<AddPlaceViewModel.State> =

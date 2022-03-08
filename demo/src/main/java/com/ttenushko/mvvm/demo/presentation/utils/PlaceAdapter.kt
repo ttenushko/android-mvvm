@@ -14,8 +14,10 @@ class PlaceAdapter(
     private var items: List<Place> = listOf()
 
     fun set(items: List<Place>) {
-        this.items = items
-        notifyDataSetChanged()
+        if(items != this.items) {
+            this.items = items
+            notifyDataSetChanged()
+        }
     }
 
     fun clear() {
