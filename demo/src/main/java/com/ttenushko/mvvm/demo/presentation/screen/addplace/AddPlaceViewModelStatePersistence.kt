@@ -6,10 +6,17 @@ import com.ttenushko.mvvm.android.ViewModelStatePersistence
 class AddPlaceViewModelStatePersistence : ViewModelStatePersistence<AddPlaceViewModel.State> {
 
     override fun saveState(state: AddPlaceViewModel.State?, outState: Bundle) {
-        // do nothing
+        state?.let {
+            outState.putString(SEARCH, it.search)
+        }
     }
 
-    override fun restoreState(savedState: Bundle?): AddPlaceViewModel.State? {
-        return null
+    override fun restoreState(savedState: Bundle?): AddPlaceViewModel.State? =
+        savedState?.let {
+            AddPlaceViewModel.State(it.getString(SEARCH, ""))
+        }
+
+    companion object {
+        private const val SEARCH = "search"
     }
 }
