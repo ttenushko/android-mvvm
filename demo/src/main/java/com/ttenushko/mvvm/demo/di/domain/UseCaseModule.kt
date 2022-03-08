@@ -18,10 +18,6 @@ import kotlinx.coroutines.SupervisorJob
 class UseCaseModule {
 
     @Provides
-    fun taskExecutorFactory(): TaskExecutorFactory =
-        TaskExecutorFactory.create(CoroutineScope(Dispatchers.Main + SupervisorJob()))
-
-    @Provides
     fun provideDeletePlaceUseCase(applicationSettings: ApplicationSettings): DeletePlaceUseCase =
         DeletePlaceUseCaseImpl(applicationSettings)
 

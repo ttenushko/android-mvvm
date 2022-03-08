@@ -8,7 +8,6 @@ import com.ttenushko.mvvm.demo.databinding.ItemPlaceBinding
 import com.ttenushko.mvvm.demo.domain.weather.model.Place
 
 class PlaceAdapter(
-    ctx: Context,
     private val callback: Callback
 ) : RecyclerView.Adapter<PlaceAdapter.ViewHolder>() {
 

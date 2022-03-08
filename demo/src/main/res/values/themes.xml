@@ -2,14 +2,14 @@
     <!-- Base application theme. -->
     <style name="Theme.MVVM" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryDark">@color/purple_700</item>
-        <item name="colorAccent">@color/teal_200</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
         <!-- Customize your theme here. -->
     </style>
 
     <style name="AppTheme.Widget.Toolbar" parent="Widget.AppCompat.Light.ActionBar.Solid">
-        <item name="android:textColorPrimary">@color/purple_500</item>
+        <item name="android:textColorPrimary">@color/colorPrimary</item>
         <item name="android:textColorSecondary">@color/textColorSecondary</item>
         <item name="android:textColorHint">@color/textColorSecondary</item>
     </style>

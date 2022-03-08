@@ -7,6 +7,7 @@ import com.ttenushko.mvvm.demo.presentation.base.router.RouterProxy
 import com.ttenushko.mvvm.demo.presentation.screen.MainRouter
 import com.ttenushko.mvvm.demo.presentation.utils.dagger.ApplicationContext
 import com.ttenushko.mvvm.demo.presentation.utils.dagger.ApplicationScope
+import com.ttenushko.mvvm.demo.presentation.utils.task.TaskExecutorFactory
 import dagger.Module
 import dagger.Provides
 

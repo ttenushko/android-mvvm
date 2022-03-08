@@ -13,11 +13,13 @@ import com.ttenushko.mvvm.demo.presentation.screen.places.PlacesFragment
 import com.ttenushko.mvvm.demo.presentation.screen.places.PlacesViewModel
 import com.ttenushko.mvvm.demo.presentation.screen.places.PlacesViewModelImpl
 import com.ttenushko.mvvm.demo.presentation.screen.places.PlacesViewModelStatePersistence
+import com.ttenushko.mvvm.demo.presentation.utils.task.TaskExecutorFactory
 import dagger.Component
 import dagger.Provides
 
 interface PlacesFragmentDependencies : Dependency {
     fun trackSavedPlacesUseCase(): TrackSavedPlacesUseCase
+    fun taskExecutorFactory(): TaskExecutorFactory
     fun router(): Router<MainRouter.Destination>
 }
 
@@ -27,12 +29,18 @@ internal class PlacesFragmentModule {
     @Provides
     fun viewModelProvider(
         trackSavedPlacesUseCase: TrackSavedPlacesUseCase,
+        taskExecutorFactory: TaskExecutorFactory,
         router: Router<MainRouter.Destination>
     ): (BaseFragment, PlacesViewModel.State?) -> PlacesViewModel = { fragment, savedState ->
         ViewModelProvider(fragment, object : ViewModelProvider.Factory {
             override fun <T : ViewModel?> create(modelClass: Class<T>): T =
                 PlacesViewModelHolder(
-                    PlacesViewModelImpl(savedState, trackSavedPlacesUseCase, router)
+                    PlacesViewModelImpl(
+                        savedState,
+                        trackSavedPlacesUseCase,
+                        taskExecutorFactory,
+                        router
+                    )
                 ) as T
         }).get(PlacesViewModelHolder::class.java).viewModel
     }
