@@ -46,6 +46,8 @@ dependencies {
     implementation project(':mvvm-core')
     implementation deps.androidx.lifecycleRuntime
     implementation deps.androidx.lifecycleExtensions
+    implementation deps.androidx.viewModel
+    implementation deps.androidx.viewModelSavedState
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'

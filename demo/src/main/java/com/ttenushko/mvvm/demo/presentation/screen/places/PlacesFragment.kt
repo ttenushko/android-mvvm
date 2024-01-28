@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ttenushko.mvvm.android.ViewModelStatePersistence
 import com.ttenushko.mvvm.demo.databinding.FragmentPlacesBinding
 import com.ttenushko.mvvm.demo.di.presentation.screen.DaggerPlacesFragmentComponent
 import com.ttenushko.mvvm.demo.di.presentation.screen.PlacesFragmentModule

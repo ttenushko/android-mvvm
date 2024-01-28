@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.ttenushko.mvvm.android.ViewModelStatePersistence
 import com.ttenushko.mvvm.demo.databinding.FragmentAddPlaceBinding
 import com.ttenushko.mvvm.demo.di.presentation.screen.AddPlaceFragmentModule
 import com.ttenushko.mvvm.demo.di.presentation.screen.DaggerAddPlaceFragmentComponent

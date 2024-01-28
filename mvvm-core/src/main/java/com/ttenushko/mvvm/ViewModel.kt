@@ -1,10 +1,11 @@
 package com.ttenushko.mvvm
 
-import java.io.Closeable
+import kotlinx.coroutines.channels.ReceiveChannel
+import kotlinx.coroutines.flow.StateFlow
 
-public interface ViewModel<S: ViewModel.State> : Closeable {
+public interface ViewModel<S, E> :
+    Releasable {
 
-    public fun saveState(): S?
-
-    public interface State
+    public val state: StateFlow<S>
+    public val events: ReceiveChannel<E>
 }

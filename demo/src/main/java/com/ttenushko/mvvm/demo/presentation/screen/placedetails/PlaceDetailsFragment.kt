@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.ttenushko.mvvm.android.ViewModelStatePersistence
 import com.ttenushko.mvvm.demo.databinding.FragmentPlaceDetailsBinding
 import com.ttenushko.mvvm.demo.presentation.base.fragment.BaseFragment
 import com.ttenushko.mvvm.demo.presentation.base.fragment.BaseMvvmFragment

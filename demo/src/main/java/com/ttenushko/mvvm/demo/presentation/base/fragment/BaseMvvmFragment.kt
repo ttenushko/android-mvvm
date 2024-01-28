@@ -1,7 +1,6 @@
 package com.ttenushko.mvvm.demo.presentation.base.fragment
 
 import android.os.Bundle
-import com.ttenushko.mvvm.android.ViewModelStatePersistence
 import com.ttenushko.mvvm.demo.presentation.base.viewmodel.ViewModel
 
 abstract class BaseMvvmFragment<S : ViewModel.State, V : ViewModel<S>> : BaseFragment() {

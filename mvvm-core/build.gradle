@@ -14,3 +14,7 @@ java {
 kotlin {
     explicitApi()
 }
+
+dependencies {
+    implementation deps.kotlinx.coroutines
+}

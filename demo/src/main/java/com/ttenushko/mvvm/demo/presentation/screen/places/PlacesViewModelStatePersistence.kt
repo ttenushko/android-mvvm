@@ -1,7 +1,6 @@
 package com.ttenushko.mvvm.demo.presentation.screen.places
 
 import android.os.Bundle
-import com.ttenushko.mvvm.android.ViewModelStatePersistence
 
 class PlacesViewModelStatePersistence : ViewModelStatePersistence<PlacesViewModel.State> {
 

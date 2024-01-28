@@ -3,7 +3,6 @@ package com.ttenushko.mvvm.demo.di.presentation.screen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.ttenushko.mvvm.android.ViewModelHolder
-import com.ttenushko.mvvm.android.ViewModelStatePersistence
 import com.ttenushko.mvvm.demo.di.Dependency
 import com.ttenushko.mvvm.demo.domain.application.usecase.TrackSavedPlacesUseCase
 import com.ttenushko.mvvm.demo.presentation.base.fragment.BaseFragment
